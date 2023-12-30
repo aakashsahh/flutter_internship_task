@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_internship_task/models/product_model.dart';
+import 'package:flutter_internship_task/screens/detail_screen.dart';
 import 'package:flutter_internship_task/services/product_service.dart';
 
 class ProductListWidget extends StatefulWidget {
@@ -60,7 +61,14 @@ class _ProductListWidgetState extends State<ProductListWidget> {
                 itemBuilder: (context, index) {
                   final product = _products[index];
                   return InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DetailScreen(product: product),
+                          ),
+                        );
+                      },
                       child: Card(
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
