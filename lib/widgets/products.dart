@@ -39,22 +39,82 @@ class _ProductListWidgetState extends State<ProductListWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Product List'),
+        title: const Text(
+          "Online Store",
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.w400),
+        ),
+        elevation: 0.0,
       ),
+      floatingActionButton: FloatingActionButton(
+          onPressed: () {},
+          backgroundColor: const Color.fromARGB(255, 48, 14, 77),
+          child: const Icon(
+            color: Colors.white,
+            Icons.shopping_cart,
+          )),
       body: _products.isNotEmpty // Check if the list is not empty
-          ? ListView.builder(
-              itemCount: _products.length,
-              itemBuilder: (context, index) {
-                final product = _products[index];
-                return ListTile(
-                  title: Text(
-                    product.title,
-                    style: const TextStyle(color: Colors.black),
-                  ),
-                  subtitle: Text('\$${product.price.toString()}'),
-                  // Add more UI components as needed (e.g., product image)
-                );
-              },
+          ? Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ListView.builder(
+                itemCount: _products.length,
+                itemBuilder: (context, index) {
+                  final product = _products[index];
+                  return InkWell(
+                      onTap: () {},
+                      child: Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(children: [
+                            ListTile(
+                              leading: Hero(
+                                tag: Key(product.id.toString()),
+                                child: Image.network(product.image),
+                              ),
+                              title: Text(product.title),
+                              trailing: Text(
+                                '\$${product.price}',
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ),
+                            ButtonBar(
+                              alignment: MainAxisAlignment.end,
+                              buttonPadding: EdgeInsets.zero,
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () {
+                                    //addToCart(product);
+                                  },
+                                  child: const Row(
+                                    children: [
+                                      Text(
+                                        "Add to Cart",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      )
+                                      // Text(
+                                      //   //isInCart ? "Done" : "Add to Cart",
+                                      //   style: const TextStyle(
+                                      //     fontSize: 16,
+                                      //   ),
+                                      // ),
+                                      // Visibility(
+                                      //   visible: isInCart,
+                                      //   child: const Icon(Icons.done),
+                                      // ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            )
+                          ]),
+                        ),
+                      ));
+                },
+              ),
             )
           : const Center(
               child: CircularProgressIndicator(),
