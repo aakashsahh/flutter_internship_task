@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_internship_task/models/product_model.dart';
 import 'package:flutter_internship_task/screens/detail_screen.dart';
+import 'package:flutter_internship_task/screens/search_screen.dart';
 import 'package:flutter_internship_task/services/product_service.dart';
 
 class ProductListWidget extends StatefulWidget {
@@ -28,7 +29,6 @@ class _ProductListWidgetState extends State<ProductListWidget> {
         _products = products;
       });
     } catch (e) {
-      print('Error fetching products: $e');
       // Show a SnackBar with a generic error message
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Error Loading products. Please try again later')),
@@ -44,6 +44,21 @@ class _ProductListWidgetState extends State<ProductListWidget> {
           "Online Store",
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.w400),
         ),
+        actions: [
+          FloatingActionButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SearchPage()),
+              );
+            },
+            backgroundColor: const Color.fromARGB(255, 48, 14, 77),
+            child: const Icon(
+              color: Colors.white,
+              Icons.search,
+            ),
+          )
+        ],
         elevation: 0.0,
       ),
       floatingActionButton: FloatingActionButton(
@@ -74,10 +89,7 @@ class _ProductListWidgetState extends State<ProductListWidget> {
                           padding: const EdgeInsets.all(8.0),
                           child: Column(children: [
                             ListTile(
-                              leading: Hero(
-                                tag: Key(product.id.toString()),
-                                child: Image.network(product.image),
-                              ),
+                              leading: Image.network(product.image),
                               title: Text(product.title),
                               trailing: Text(
                                 '\$${product.price}',
