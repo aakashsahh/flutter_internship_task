@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_internship_task/models/product_model.dart';
+import 'package:flutter_internship_task/screens/cart_screen.dart';
 import 'package:flutter_internship_task/screens/detail_screen.dart';
 import 'package:flutter_internship_task/screens/search_screen.dart';
 import 'package:flutter_internship_task/services/product_service.dart';
+import 'package:flutter_internship_task/models/cart_item.dart';
 
 class ProductListWidget extends StatefulWidget {
   const ProductListWidget({super.key});
@@ -15,6 +17,7 @@ class ProductListWidget extends StatefulWidget {
 class _ProductListWidgetState extends State<ProductListWidget> {
   final ProductService _productService = ProductService();
   late List<Product> _products = []; // Initialize with an empty list
+  final List<CartItem> _cartItems = []; // Maintain a list of cart items
 
   @override
   void initState() {
@@ -36,33 +39,58 @@ class _ProductListWidgetState extends State<ProductListWidget> {
     }
   }
 
+  void addToCart(Product product) {
+    // Check if the product is already in the cart
+    var cartItem = _cartItems.firstWhere(
+      (item) => item.product.id == product.id,
+      orElse: () => CartItem(product: product),
+    );
+
+    // If the product is in the cart, increase the quantity, otherwise add a new item
+    if (_cartItems.contains(cartItem)) {
+      cartItem.quantity++;
+    } else {
+      _cartItems.add(cartItem);
+    }
+    print('Added to cart: ${product.title}');
+    print('Cart items: $_cartItems');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
           "Online Store",
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.w400),
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.w400, color: Colors.deepPurple),
         ),
         actions: [
-          FloatingActionButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => SearchPage()),
-              );
-            },
-            backgroundColor: const Color.fromARGB(255, 48, 14, 77),
-            child: const Icon(
-              color: Colors.white,
-              Icons.search,
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SearchPage()),
+                );
+              },
+              icon: const Icon(
+                Icons.search,
+                color: Colors.deepPurple,
+              ),
             ),
           )
         ],
         elevation: 0.0,
       ),
       floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            // Open the cart screen
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => CartScreen(cart: Cart(), cartItems: _cartItems)),
+            );
+          },
           backgroundColor: const Color.fromARGB(255, 48, 14, 77),
           child: const Icon(
             color: Colors.white,
@@ -105,7 +133,7 @@ class _ProductListWidgetState extends State<ProductListWidget> {
                               children: [
                                 ElevatedButton(
                                   onPressed: () {
-                                    //addToCart(product);
+                                    addToCart(product);
                                   },
                                   child: const Row(
                                     children: [
@@ -115,16 +143,6 @@ class _ProductListWidgetState extends State<ProductListWidget> {
                                           fontSize: 16,
                                         ),
                                       )
-                                      // Text(
-                                      //   //isInCart ? "Done" : "Add to Cart",
-                                      //   style: const TextStyle(
-                                      //     fontSize: 16,
-                                      //   ),
-                                      // ),
-                                      // Visibility(
-                                      //   visible: isInCart,
-                                      //   child: const Icon(Icons.done),
-                                      // ),
                                     ],
                                   ),
                                 )

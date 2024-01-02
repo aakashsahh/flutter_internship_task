@@ -7,6 +7,7 @@ class Product {
   final String image;
   final double ratingRate;
   final int ratingCount;
+  
 
   Product({
     required this.id,
@@ -34,4 +35,3 @@ class Product {
     );
   }
 }
-
