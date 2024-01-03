@@ -17,9 +17,9 @@ This Flutter project serves as an online store application. Users can browse a l
 
 ## Screenshots 
 
-![Screenshot 1](Screenshots/Screenshot_1.png)
-![Screenshot 2](Screenshots/Screenshot_2.png)
-![Screenshot 3](Screenshots/Screenshot_3.png)
-![Screenshot 4](Screenshots/Screenshot_4.png)
+![Alt text](Screenshots/Screenshot_1.png)
+![Alt text](Screenshots/Screenshot_2.png)
+![Alt text](Screenshots/Screenshot_3.png)
+![Alt text](Screenshots/Screenshot_4.png)
 
 
