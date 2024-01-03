@@ -61,7 +61,6 @@ class _SearchPageState extends State<SearchPage> {
               onPressed: () {
                 // Call the onSearch function with the search query
                 widget.onSearch(_searchController.text);
-                
               },
               child: const Text('Search'),
             ),
@@ -89,6 +88,8 @@ class _SearchPageState extends State<SearchPage> {
                 },
               ),
             ),
+            if (searchResults.isEmpty) // Check if there are no search results
+              const Text('No results found.'), // Display an error message
           ],
         ),
       ),
