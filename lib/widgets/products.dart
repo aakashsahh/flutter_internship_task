@@ -18,6 +18,7 @@ class _ProductListWidgetState extends State<ProductListWidget> {
   final ProductService _productService = ProductService();
   late List<Product> _products = []; // Initialize with an empty list
   final List<CartItem> _cartItems = []; // Maintain a list of cart items
+  late List<Product> _allProducts = [];
 
   @override
   void initState() {
@@ -29,16 +30,30 @@ class _ProductListWidgetState extends State<ProductListWidget> {
     try {
       final products = await _productService.fetchProducts();
       setState(() {
+        _allProducts = products;
         _products = products;
       });
     } catch (e) {
       // Show a SnackBar with a generic error message
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Error Loading products. Please try again later')),
-      );
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Unable to load products!'),
+      ));
     }
   }
+  void _searchProducts(dynamic result) {
+  setState(() {
+    if (result is String) {
+      // Show all products
+      _products = _allProducts;
+    } else if (result is List<Product>) {
+      // Show search results
+      _products = result;
+    }
+  });
+}
 
+  //To add products in cart
   void addToCart(Product product) {
     // Check if the product is already in the cart
     var cartItem = _cartItems.firstWhere(
@@ -52,8 +67,6 @@ class _ProductListWidgetState extends State<ProductListWidget> {
     } else {
       _cartItems.add(cartItem);
     }
-    print('Added to cart: ${product.title}');
-    print('Cart items: $_cartItems');
   }
 
   @override
@@ -71,7 +84,10 @@ class _ProductListWidgetState extends State<ProductListWidget> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const SearchPage()),
+                  MaterialPageRoute(builder: (context) =>  SearchPage(
+                    allProducts: _allProducts,
+                      onSearch: _searchProducts,
+                  )),
                 );
               },
               icon: const Icon(
@@ -118,7 +134,13 @@ class _ProductListWidgetState extends State<ProductListWidget> {
                           child: Column(children: [
                             ListTile(
                               leading: Image.network(product.image),
-                              title: Text(product.title),
+                              title: Text(
+                                product.title,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w300,
+                                ),
+                              ),
                               trailing: Text(
                                 '\$${product.price}',
                                 style: const TextStyle(

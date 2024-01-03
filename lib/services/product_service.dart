@@ -20,24 +20,4 @@ class ProductService {
       throw Exception('Failed to load products');
     }
   }
-
-  Future<List<Product>> searchProducts(String query) async {
-  try {
-    final response = await http.get(Uri.parse('$apiUrl?q=$query'));
-    if (response.statusCode == 200) {
-      final List<dynamic> data = json.decode(response.body);
-      print('Search query: $query');
-      print('API response: $data');
-      return List<Product>.from(data.map((json) => Product.fromJson(json)));
-    } else {
-      print('Error in API response: ${response.statusCode}');
-      print('Raw API response: ${response.body}');
-      return [];
-    }
-  } catch (e) {
-    print('Error: $e');
-    return [];
-  }
-}
-
 }
